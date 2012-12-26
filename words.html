@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <script src="js/localStorageInterface.js"/>
+    <script src="js/wordBank.js"/>
+  </head>
+  <body>
+    <ul>
+    <script>
+      var groups = getGroups();
+      for(var i=0; i<groups.length; i++) {
+	document.writeIn("<li>" + groups[i] + "<ul>");
+	var words = getWordsByGroup(groups[i]);
+	for(var j=0; j<words.length; j++) {
+	  document.writeIn("<li>" + words[j] + "</li>");
+	}
+	document.writeIn("</ul>");
+      }
+    </script>
+    </ul>
+  </body>
+</html>
