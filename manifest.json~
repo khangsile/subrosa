@@ -3,9 +3,7 @@
   "version": "1.0",
   "manifest_version": 2,
   "description": "Holds tricky words in a DB",
-  "background" : {
-    "scripts": ["store.js", "localStorageInterface.js", "wordBank.js"]
-    },
+  "background" : "background.html",
   "browser_action": {
     "default_title" : "Subrosa Dictionary",
     "default_popup": "popup.html"

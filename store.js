@@ -1,11 +1,3 @@
-
-
-chrome.contextMenus.create({
-  "title": "Store Word", 
-  "contexts": ["selection"],
-  "onclick" : clickHandler
-  });
-
 var clickHandler = function(e) {
   
   if (e.selectionText) {
@@ -23,3 +15,9 @@ var clickHandler = function(e) {
   }
 
 };
+
+chrome.contextMenus.create({
+	"title": "Store word",
+	"contexts": ["selection"],
+	"onclick" : clickHandler
+ });
