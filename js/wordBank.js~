@@ -1,0 +1,15 @@
+function addWord(word, group) {
+    addWordToBank(word, group);
+}
+
+function addGroup(group) {
+    addGroupToBank(group);
+}
+
+function getWordsByGroupFromBank(group) {
+    return getWordsByGroup(group);
+}
+
+function getGroups() {
+    return getGroupsInBank();
+}
