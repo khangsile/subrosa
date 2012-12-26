@@ -1,0 +1,17 @@
+
+
+chrome.contextMenus.create({
+  "title": "Store Word", 
+  "contexts": ["selection"],
+  "onclick" : clickHandler
+  });
+
+var clickHandler = function(e) {
+  
+  if (e.selectionText) {
+    //add the word and definition to the database with timestamp
+  } else {
+    //popup - "Incorrect input. Your argument is invalid."
+  }
+
+};
