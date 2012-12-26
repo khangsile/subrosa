@@ -1,0 +1,13 @@
+{
+  "name": "Sub Rosa",
+  "version": "1.0",
+  "description": "Holds tricky words in a DB",
+  "background_page" : "background.html",
+  "browser_action": {
+    "default_title" : "Save to Personal Dictionary"
+    },
+  "permissions" : [
+    "tabs",
+    "contextMenus" 
+    ]
+}
