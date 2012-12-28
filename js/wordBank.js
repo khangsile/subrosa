@@ -1,5 +1,5 @@
-function addWord(word, group) {
-    addWordToBank(word, group);
+function addWord(word, group, definition) {
+    addWordToBank(word, group, definition);
 }
 
 function addGroup(group) {
@@ -12,4 +12,8 @@ function getWordsByGroup(group) {
 
 function getGroups() {
     return getGroupsInBank();
+}
+
+function getDefinition(word) {
+    return getWordDefinition(word);
 }

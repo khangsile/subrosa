@@ -1,5 +1,4 @@
 function addWordToBank(word, group, definition) {
-    localStorage = window.localStorage;
     if(group === undefined)
 	group = 'GENERAL';
     var groupName = 'subrosa.groups.' + group;
@@ -10,24 +9,26 @@ function addWordToBank(word, group, definition) {
 }
 
 function addGroupToBank(group) {
-    localStorage = window.localStorage;
     localStorage.setItem('subrosa.groups',
 			 localStorage.getItem('subrosa.groups') + group + ' ');
+    localStorage.setItem('subrosa.groups.' + group, '');
 }
 
 function getWordsByGroupFromBank(group) {
-    localStorage = window.localStorage;
-    var words = localStorage.getItem('subrosa.groups.' + group);
-    return words.split(' ');
+    var groupId = 'subrosa.groups.' + group;
+    var words = localStorage.getItem(groupId);
+    return words.replace(/^\s+|\s+$/g,'').split(' ');
 }
 
 function getGroupsInBank() {
-    localStorage = window.localStorage;
     var groups = localStorage.getItem('subrosa.groups');
-    return groups.split(' ');
+    return groups.replace(/^\s+|\s+$/g,'').split(' ');
 }
 
 function getWordDefinition(word) {
-    localStorage = window.localStorage;
     return localStorage.getItem('subrosa.word.' + word);
 }
+
+//localStorage.removeItem('subrosa.groups.myGroup');
+localStorage.removeItem('subrosa.groups');
+localStorage.setItem('subrosa.groups', '');
