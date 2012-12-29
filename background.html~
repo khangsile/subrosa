@@ -10,5 +10,4 @@
 
       chrome.extension.onRequest.addListener(onRequest);
     </script>
-    <script src="store.js"></script>
 </html>
