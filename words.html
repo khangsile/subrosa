@@ -1,21 +1,28 @@
 <html>
   <head>
-    <script src="js/localStorageInterface.js"/>
-    <script src="js/wordBank.js"/>
+    <script src="js/localStorageInterface.js"></script>
+    <script src="js/wordBank.js"></script>
   </head>
   <body>
-    <ul>
+    <p id="wordlist"></p>
     <script>
+      var groupString = "myGroup";
+      var word = "contumacious";
+      var definition = "unruly and rebellious";
+      addGroup(groupString);
+      addWord(word, groupString, definition);
       var groups = getGroups();
+      var txt = "<ul>";
       for(var i=0; i<groups.length; i++) {
-	document.writeIn("<li>" + groups[i] + "<ul>");
+	txt += ("<li>" + groups[i] + "<ul>");
 	var words = getWordsByGroup(groups[i]);
 	for(var j=0; j<words.length; j++) {
-	  document.writeIn("<li>" + words[j] + "</li>");
+	  txt += ("<li>" + words[j] + "</li>");
 	}
-	document.writeIn("</ul>");
+	txt += "</ul>";
       }
+      txt += "</ul>";
+      document.getElementById("wordlist").innerHTML = txt;
     </script>
-    </ul>
   </body>
 </html>
