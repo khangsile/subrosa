@@ -3,14 +3,17 @@
   "version": "1.0",
   "manifest_version": 2,
   "description": "Holds tricky words in a DB",
-  "background" : "background.html",
+  "background" : {
+    scripts: ["jquery-1.8.3.js", "store.js"] 
+    },
   "browser_action": {
     "default_title" : "Subrosa Dictionary",
     "default_popup": "popup.html"
     },
   "permissions" : [
-    "tabs",
     "contextMenus",
-    "http://wwww.stands4.com/services/vs/defs.php"
+    "*://*.quizlet.com/*",
+    "*://*.dictionaryapi.com/api/*",
+    "*://*.google.com/dictionary/*"
     ]
 }
