@@ -2,6 +2,17 @@ onError = function(tx, e) {
     alert("There has been an error: " + e.message);
 }
 
+/*
+function addGroup(group, description, callback)
+function addWord(word, definition, groupid) 
+function getGroups(callback)
+function getWordsByGroup(groupid, callback)
+function removeWord(wordid, callback) 
+function removeGroup(groupid, callback) 
+function setGroupOfWord(wordid, oldgroupid, newgroupid, callback) 
+function setNoteOfWord(wordid, note, callback) 
+ */
+
 function setUpDatabase() {
     var db = openDatabase('WordBank', '1.0', 'Database for the WordBank app', 5 * 1024 * 1024);
     db.transaction(function(tx) { 
@@ -71,22 +82,39 @@ function getWordsByGroup(groupid, callback) {
 	});
 }
 
-function removeWord(wordid) {
+function removeWord(wordid, callback) {
     db = wordbank;
     db.transaction(function(tx) {
 	    tx.executeSql('DELETE FROM wordsincategory WHERE wordid=?',
 			  [wordid], null, onError);
-	    tx.executeSql('DELETE FROM word WHERE id=?', [wordid], null, onError);
+	    tx.executeSql('DELETE FROM word WHERE id=?', [wordid], callback, onError);
 	});
 }
 
-function removeGroup(groupid) {
+function removeGroup(groupid, callback) {
     db = wordbank;
     db.transaction(function(tx) {
 	    tx.executeSql('DELETE FROM wordsincategory WHERE categoryid=?',
 			  [groupid], null, onError);
 	    tx.executeSql('DELETE FROM category WHERE id=?',
-			  [groupid], null, onError);
+			  [groupid], callback, onError);
+	});
+}
+
+function setGroupOfWord(wordid, oldgroupid, newgroupid, callback) {
+    db = wordbank;
+    db.transaction(function(tx) {
+	    tx.executeSql('UPDATE wordsincategory SET categoryid=? ' +
+			  'WHERE wordid=? AND categoryid=?',
+			  [newgroupid, wordid, oldgroupid], callback, onError);
+	});
+}
+
+function setNoteOfWord(wordid, note, callback) {
+    db = wordbank;
+    db.transaction(function(tx) {
+	    tx.executeSql('UPDATE word SET note=? ' +
+			  'WHERE id=?', [note, wordid], callback, onError);
 	});
 }
 
