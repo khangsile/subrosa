@@ -54,8 +54,11 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 var clickHandler = function(e) {
     alert(e.menuItemId);
     lookUpQuery(e.selectionText, function(def) {
-	    if (def.trim() == '')
+	    if (def.trim() == '') {
 		def = "Invalid input. Your argument is invalid.";
+	    } else {
+		addWord(e.selectionText, def, e.menuItemId);
+	    }
 	    alert(def);
 	});
 }
@@ -65,9 +68,22 @@ var parentCM = chrome.contextMenus.create({
 	"contexts": ["selection"]
 });
 
-var childCM = chrome.contextMenus.create({
-	"title": "Default",
-	"parentId": parentCM,
-	"onclick": clickHandler,
-	"contexts": ["selection"]
-});           
+function addContextChild(id, name) {
+  var child = chrome.contextMenus.create({
+	    "title": name,
+	    "id": id + '',
+	    "parentId": parentCM,
+	    "onclick": clickHandler,
+	    "contexts": ["selection"]
+    });
+}
+
+getGroups(function(tx, results) {
+        for(var i=0; i < results.rows.length; i++) {
+            var row = results.rows.item(i);
+
+            addContextChild(row.id, row.name);
+        }
+    });
+
+addContextChild(0, "Default");         

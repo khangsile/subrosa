@@ -14,7 +14,7 @@
   } ],
   "browser_action": {
     "default_title" : "Subrosa Dictionary",
-    "default_popup": "popup.html"
+    "default_popup": "words.html"
     },
   "options_page": "words.html",
   "permissions" : [
