@@ -1,14 +1,40 @@
 <html>
-    <script src="http://code.jquery.com/jquery-1.4.2.js"></script>
+  <head>
+    <script src="js/jquery-1.8.3.js"></script>
+    <script src="js/localStorageInterface.js"></script>
+    <script src="js/wordBank.js"></script>
+    <script src="storeWord.js"></script>
     <script>
-      function onRequest(request,sender,callback) {
-            if (request.action == 'getJSON') {
-                alert(request.url);
-                $.getJSON(request.url, callback);
-            }
-      }
+      //API Url
+      var API_KEY = "721c7f71-22ff-48d9-80fa-2489ea2a009c"
+      var DICT_API = "http://www.dictionaryapi.com/api/v1/references/collegiate/xml" +
+        "/%query%?key=" + API_KEY;
 
-      chrome.extension.onRequest.addListener(onRequest);
+      function lookUpWord(query, callback) {
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+          if (req.readyState == 4 && req.status == 200) {
+            var xml = $.parseXML(req.responseText),
+            $xml = $( xml ),
+            $test = $xml.find('def');
+            var report = $test.text();
+          }
+        }
+      
+        var url = DICT_API.replace("%query%", query);
+        req.open('GET', url, true);
+        req.send();
+
+      chrome.extension.onMessage.addListener(function(request, sender, callback) {
+        if (request.method == 'lookup') {
+          Lookup word
+          var query = request.arg;
+          
+          lookUpWord(request.arg, function(resp) {
+            callback(resp);
+          });
+        }
+      }
     </script>
-    <script src="store.js"></script>
+  </head>
 </html>

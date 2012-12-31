@@ -6,10 +6,14 @@ function addGroup(group) {
     addGroupToBank(group);
 }
 
-function getWordsByGroupFromBank(group) {
-    return getWordsByGroup(group);
+function getWordsByGroup(group) {
+    return getWordsByGroupFromBank(group);
 }
 
 function getGroups() {
     return getGroupsInBank();
+}
+
+function getDefinition(word) {
+    return getWordDefinition(word);
 }

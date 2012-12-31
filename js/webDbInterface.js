@@ -13,13 +13,20 @@ function setGroupOfWord(wordid, oldgroupid, newgroupid, callback)
 function setNoteOfWord(wordid, note, callback) 
 function setNameOfGroup(groupid, name, callback)
  */
+var generalWords = 'GENERAL_WORDS';
+var tableInitialized = 'subrosa.webdb.tableinit';
 
 function setUpDatabase() {
     var db = openDatabase('WordBank', '1.0', 'Database for the WordBank app', 5 * 1024 * 1024);
     db.transaction(function(tx) { 
 	    tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
 			  'category(id INTEGER PRIMARY KEY ASC, name TEXT NOT NULL, description TEXT)', 
-			  [], null, onError);
+			  [], function(tx, results) {
+			      if(localStorage.getItem(tableInitialized) != null) {
+				  addGroup(generalWords, null, null);
+				  localStorage.setItem(tableInitialized, 'true');
+			      }
+			  }, onError);
 	});
     db.transaction(function(tx) {
 	    tx.executeSql('CREATE TABLE IF NOT EXISTS ' +
@@ -40,7 +47,7 @@ function setUpDatabase() {
 function addGroup(group, description, callback) {
     db = wordbank;
     db.transaction(function(tx) {
-	    if(description === undefined) {
+	    if(description === null) {
 		tx.executeSql('INSERT INTO category (name) VALUES (?)', [group], 
 			      callback, onError);
 	    } else {
@@ -52,7 +59,7 @@ function addGroup(group, description, callback) {
 
 function addWord(word, definition, groupid) {
     db = wordbank;
-    if(groupid === undefined)
+    if(groupid === null)
 	groupid = 'GENERAL';
     db.transaction(function(tx) {
 	    tx.executeSql('INSERT INTO word (name, definition) VALUES (?,?)',

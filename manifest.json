@@ -4,16 +4,16 @@
   "manifest_version": 2,
   "description": "Holds tricky words in a DB",
   "background" : {
-    "scripts": ["js/jquery-1.8.3.js", "store.js"] 
+    "page": "background.html"
     },
   "browser_action": {
     "default_title" : "Subrosa Dictionary",
     "default_popup": "popup.html"
     },
+  "options_page": "words.html",
   "permissions" : [
+    "tabs",
     "contextMenus",
-    "*://*.quizlet.com/*",
-    "*://*.dictionaryapi.com/api/*",
-    "*://*.google.com/dictionary/*"
+    "*://*.dictionaryapi.com/api/*"
     ]
 }
