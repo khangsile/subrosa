@@ -3,6 +3,7 @@
     <link rel="stylesheet" type="text/css" href="css/display.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="js/wordBankInterface.js"></script>
+    <script src="js/header.js"></script>
     <script>
       $(document).ready(function() {
          getGroups(renderGroups);
@@ -23,6 +24,7 @@
             if(groupName != "") {
                addGroup(groupName, null, renderGroup);
             }
+            document.getElementById("addgroup-text").value = "";
          });
       });
     </script>
@@ -30,23 +32,23 @@
   <body>
     <div id="navbar-wrapper">
       <div id="navbar">
-	<div id="navbar-container">
+
 	  <ul>
 	    <li>
-	      <h1>Word Bank</h1>
+	      <h1 style="display: inline">Word Bank</h1>
 	    </li>
 	    <li>
 	      <div id="collapse"><img src="img/collapse-medium-silver-Shapes4FREE.png"></div>
 	      <div id="expand"><img src="img/expand-medium-silver-Shapes4FREE.png"></div>
 	    </li>
 	    <li>
-	      <div id="addgroup-inner" align="right">
+	      <div id="addgroup-inner">
 		<input type="Text" id="addgroup-text">
 		<button id="addgroup-button">Add Group</button>
 	      </div>
 	    </li>
 	  </ul>
-	</div>
+
       </div>
     </div>
 
