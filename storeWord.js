@@ -1,15 +1,15 @@
-var clickHandler = function(e) {
+function lookUpQuery(query, callback) {
   
     //add the word and definition to the database
     var API_KEY = "721c7f71-22ff-48d9-80fa-2489ea2a009c";
-    var word = e.selectionText.toLowerCase();
+    var word = query.toLowerCase();
     var req = new XMLHttpRequest();
 
     req.open("GET", 
-	      "http://www.dictionaryapi.com/api/v1/references" +
-	      "/collegiate/xml/" + word +
-	     "?key=" + API_KEY,
-	     true);
+           "http://www.dictionaryapi.com/api/v1/references" +
+           "/collegiate/xml/" + word +
+           "?key=" + API_KEY,
+           true);
 
     req.onreadystatechange = function() {
 	if (req.readyState == 4 && req.status == 200) {
@@ -20,24 +20,54 @@ var clickHandler = function(e) {
 
 	    $test = $deflist.find('dt');
 	    
-	    var defs = $test.text().split(":");
-	    var def = defs[1];
-	    if (defs.length > 2) {
-		def = defs[2];
-	    } else {
-		def = defs[1];
+	    try {
+	      $test.find('vi').remove();
+	      $test.find('sx').remove();
+	    } catch (err) {
+		console.log(err.message);
 	    }
+	    var defs = $test.text().split(":");
+	    var def = defs[0];
+
+	    for(var i=0; def.trim() == '' && i < defs.length; i++) {
+		def = defs[i];
+	    }
+
+	    callback(def);
 	    
-	    alert(def);
 	}
-    }
+  }
 
-    req.send();
+req.send();
 
-    }
+}
 
-chrome.contextMenus.create({
-	    "title": "Store word",
-		"contexts": ["selection"],
-		"onclick" : clickHandler
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+        if (request.method == "lookup") {
+	    lookUpQuery(request.arg, function(def) {
+		    sendResponse({definition: def});
+		    });
+        }
 });
+
+
+var clickHandler = function(e) {
+    alert(e.menuItemId);
+    lookUpQuery(e.selectionText, function(def) {
+	    if (def.trim() == '')
+		def = "Invalid input. Your argument is invalid.";
+	    alert(def);
+	});
+}
+
+var parentCM = chrome.contextMenus.create({
+	"title": "Store word",
+	"contexts": ["selection"]
+});
+
+var childCM = chrome.contextMenus.create({
+	"title": "Default",
+	"parentId": parentCM,
+	"onclick": clickHandler,
+	"contexts": ["selection"]
+});           
