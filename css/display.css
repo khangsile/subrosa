@@ -1,0 +1,127 @@
+body {
+	font-family:"Times New Roman", times, serif;
+	position: relative;
+	font-size: 1 em;
+}
+
+#navbar-wrapper {
+	width: 100%;
+	height: 50 px;
+}
+
+#navbar {
+	margin: 0 auto;
+	width: 50%;
+	height: 50 px;
+	position: fixed;
+	top:0; 
+	left:0;
+}
+
+#navbar ul {
+	list-style: none;
+	margin: 0;
+	padding: 5 px;
+}
+
+#navbar ul li {
+	margin: 0;
+	padding-left: 30 px;
+	display: inline;
+}
+
+#addgroup-outer {
+	overflow: auto;
+}
+
+#addgroup-inner {
+	float: right;
+	display:inline;
+	right: 0 px;
+}
+
+#collapse, #expand {
+	float: right;
+	cursor: pointer;
+	color: blue;
+}
+
+#wordlist-container {
+	width: 600 px;
+	margin: 0 auto;
+}
+
+#wordlist-container ul {
+	list-style-type: none;
+	position: relative;
+}
+
+.group {
+        padding-bottom: 5 px;
+	padding-top: 5 px;
+	border-bottom: 1 px solid;
+	cursor: pointer;
+}
+
+ul.wordlist {
+	list-style-type: none;
+	padding: 0;
+	margin-left: 0;
+}
+
+ul.wordlist li {
+/*	width: 200 px;
+	display: inline-block; */
+	padding-right: 5 px;
+	vertical-align: top;
+	text-overflow: ellipsis;
+}	
+
+h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 1.6 em;
+	font-weight: normal;
+}
+
+dt {
+	display: inline;
+	font-weight: bold;
+	font-size: 1.05 em;
+	margin-right: 5 px;
+}
+
+dd {
+	height: 60 px;
+	margin-left: 0;
+	display: inline;
+}
+
+ul.wordlist li:hover {
+	background:#ffffcc;
+}
+
+/*
+	Popup box CSS
+*/
+
+#mask {
+	position: absolute;
+	z-index: 9000;
+	background-color: #000;
+	display: none;
+}
+
+#boxes .window {
+	position: fixed;
+	width: 440 px;
+	height: 200 px;
+	display: none;
+	z-index: 9999;
+	padding: 20 px;
+}
+
+#boxes #dialog {
+	width: 375 px;
+	height: 203 px;
+}

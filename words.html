@@ -1,28 +1,55 @@
 <html>
   <head>
-    <script src="js/localStorageInterface.js"></script>
-    <script src="js/wordBank.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/display.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="js/wordBankInterface.js"></script>
+    <script>
+      $(document).ready(function() {
+         getGroups(renderGroups);
+         $("#expand").click(function() {
+            $(".wordlist").slideDown(100);
+            $("#expand").hide();
+            $("#collapse").show();
+         });
+         $("#collapse").click(function() {
+            $(".wordlist").slideUp(100);
+            $("#collapse").hide();
+            $("#expand").show();
+         });
+         $("#expand").hide();
+         
+         $("button#addgroup-button").click(function() {
+            var groupName = document.getElementById("addgroup-text").value.trim();
+            if(groupName != "") {
+               addGroup(groupName, null, renderGroup);
+            }
+         });
+      });
+    </script>
   </head>
   <body>
-    <p id="wordlist"></p>
-    <script>
-      var groupString = "myGroup";
-      var word = "contumacious";
-      var definition = "unruly and rebellious";
-      addGroup(groupString);
-      addWord(word, groupString, definition);
-      var groups = getGroups();
-      var txt = "<ul>";
-      for(var i=0; i<groups.length; i++) {
-	txt += ("<li>" + groups[i] + "<ul>");
-	var words = getWordsByGroup(groups[i]);
-	for(var j=0; j<words.length; j++) {
-	  txt += ("<li>" + words[j] + "</li>");
-	}
-	txt += "</ul>";
-      }
-      txt += "</ul>";
-      document.getElementById("wordlist").innerHTML = txt;
-    </script>
+    <div id="navbar-wrapper">
+      <div id="navbar">
+	<div id="navbar-container">
+	  <ul>
+	    <li>
+	      <div id="collapse"><img src="img/collapse-medium-silver-Shapes4FREE.png"></div>
+	      <div id="expand"><img src="img/expand-medium-silver-Shapes4FREE.png"></div>
+	    </li>
+	    <li>
+	      <div id="addgroup-inner" align="right">
+		<input type="Text" id="addgroup-text">
+		<button id="addgroup-button">Add Group</button>
+	      </div>
+	    </li>
+	  </ul>
+	</div>
+      </div>
+    </div>
+
+      <div id="wordlist-container">
+	<ul id="grouplist"></ul>
+      </div>		       
+
   </body>
 </html>
