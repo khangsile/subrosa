@@ -11,6 +11,7 @@ function removeWord(wordid, callback)
 function removeGroup(groupid, callback) 
 function setGroupOfWord(wordid, oldgroupid, newgroupid, callback) 
 function setNoteOfWord(wordid, note, callback) 
+function setNameOfGroup(groupid, name, callback)
  */
 
 function setUpDatabase() {
@@ -115,6 +116,14 @@ function setNoteOfWord(wordid, note, callback) {
     db.transaction(function(tx) {
 	    tx.executeSql('UPDATE word SET note=? ' +
 			  'WHERE id=?', [note, wordid], callback, onError);
+	});
+}
+
+function setNameOfGroup(groupid, name, callback) {
+    db = wordbank;
+    db.transaction(function(tx) {
+	    tx.executeSql('UPDATE category SET name=? ' +
+			  'WHERE id=?', [name, groupid], callback, onError);
 	});
 }
 
