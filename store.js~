@@ -1,27 +1,8 @@
-var clickHandler = function(e) {
+window.addEventListener('dblclick', handleClick, false);
+
+function handleClick(e) {
   
     //add the word and definition to the database with timestamp
-    // var req = new XMLHttpRequest();
-    
-	// chrome_getJSON = function(url, callback) {
-	//alert("bitch");
-	//chrome.extension.sendMessage({action: 'getJSON', url:url},
-	//		     callback);
-	//}
-
-	//logit = function(data) {
-	//try {
-	//  alert(JSON.stringify(data));
-	//} catch (err) { alert(err.message);}
-	//}
-	//chrome_getJSON("http://www.google.com/dictionary/json?" +
-	//    "callback=logit&" + 
-	//    "q=" + e.selectionText + "&" +
-	//    "sl=en&tl=en&" +
-	//    "restriction=pr%2Cde&" +
-	//    "client=te", logit);
-	//alert("BITCH");
-	//} catch (err) {alert(err.message);
         var API_KEY = "721c7f71-22ff-48d9-80fa-2489ea2a009c";
 	var word = e.selectionText.toLowerCase();
 	var req = new XMLHttpRequest();
@@ -37,22 +18,18 @@ var clickHandler = function(e) {
 		
 		var xml = $.parseXML(req.responseText),
 		$xml = $( xml ),
-		$test = $xml.find('id');
+		$test = $xml.find('def');
+		var report = $test.text();
+		
+		if (report == "") {
+		    report = "Your argument is invalid.";
+		}
 
-		alert(req.responseXML);
-		//for (var i=0, definition; definition = definitions[i]; i++) {
-		//    alert(definition.getAttribute("id"));
-		//}
+		alert(report);
+		addWordToBank(e.selectionText, "myGroup", report);
 	    }
 	}
 
 	req.send();
 
 }
-
-
-chrome.contextMenus.create({
-	"title": "Store word",
-	"contexts": ["selection"],
-	"onclick" : clickHandler
- });

@@ -4,7 +4,6 @@
     <script src="js/wordBank.js"></script>
   </head>
   <body>
-    FUUUUUUUCK YOU!
     <p id="wordlist"></p>
     <script>
       var groupString = "myGroup";

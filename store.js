@@ -1,5 +1,17 @@
-var clickHandler = function(e) {
-  
+window.addEventListener('dblclick', handleClick, false);
+
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+	if (request.method == "getSelection")
+	    sendResponse({data: window.getSelection().toString()});
+	else
+	    sendResponse({}); // snub them.
+    });
+
+function handleClick(e) {
+    var query = window.getSelection().toString().trim();
+    if (query != "") {
+      alert(query);
+    }
     //add the word and definition to the database with timestamp
         var API_KEY = "721c7f71-22ff-48d9-80fa-2489ea2a009c";
 	var word = e.selectionText.toLowerCase();
@@ -17,21 +29,17 @@ var clickHandler = function(e) {
 		var xml = $.parseXML(req.responseText),
 		$xml = $( xml ),
 		$test = $xml.find('def');
+		var report = $test.text();
+		
+		if (report == "") {
+		    report = "Your argument is invalid.";
+		}
 
-		alert($test.text());
-		//for (var i=0, definition; definition = definitions[i]; i++) {
-		//    alert(definition.getAttribute("id"));
-		//}
+		alert(report);
+		addWordToBank(e.selectionText, "myGroup", report);
 	    }
 	}
 
 	req.send();
 
 }
-
-
-chrome.contextMenus.create({
-	"title": "Store word",
-	"contexts": ["selection"],
-	"onclick" : clickHandler
- });
