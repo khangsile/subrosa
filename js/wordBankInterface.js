@@ -92,6 +92,14 @@ function getWordsByGroup(groupid, callback) {
 	});
 }
 
+function getWord(wordid, callback) {
+    db = wordbank;
+    db.transaction(function(tx) {
+	    tx.executeSql('SELECT * FROM word WHERE id=?',
+			  [wordid], callback, onError);
+	});
+}
+
 function removeWord(wordid, callback) {
     db = wordbank;
     db.transaction(function(tx) {
@@ -136,28 +144,42 @@ function setNameOfGroup(groupid, name, callback) {
 	});
 }
 
+renderWordPopup = function(tx, results) {
+    var txt = '';
+    var word = results.rows.item(0);
+    txt += '<div class=term>' + word.name + '</div>';
+    txt += '<div class="definition">' + word.definition + '</div>';
+    $('#wordfill').html(txt);
+}
+
 renderGroups = function(tx, results) {
     var txt = '';
-    for(var i=0; i<results.rows.length; i++) {
-	var row = results.rows.item(i);
-	txt += '<li >' + 
-	    '<div class=group><h1 id=g' + row.id + '>' + 
-	    row.name +
-	    '</h1></div><ul class=wordlist id=l' + row.id + '></ul></li>';
+    if(results.rows.length == 0)
+	$('#emptylist').show();
+    else {
+	$('#emptylist').hide();
+	for(var i=0; i<results.rows.length; i++) {
+	    var row = results.rows.item(i);
+	    txt += '<li >' + 
+		'<div class=group><h1>' + row.name +
+		'</h1><a class=removeGroup href=#g' + row.id + 
+		'><img src=img/collapse-large-blue-Shapes4FREE.png></a>' +
+		'</div><ul class=wordlist id=l' + row.id + '></ul></li>';
+	}
+	$('#grouplist').html(txt);
+	for(var i=0; i<results.rows.length; i++) {
+	    getWordsByGroup(results.rows.item(i).id, renderWordsOfGroup);
+	}
+	pageSetup();
+
     }
-    $('#grouplist').append(txt);
-    for(var i=0; i<results.rows.length; i++) {
-	getWordsByGroup(results.rows.item(i).id, renderWordsOfGroup);
-    }
-    $(".group").click(function() {
-        $(this).next(".wordlist").slideToggle(100);
-    });
 }
 
 renderGroup = function(tx1, results1) {
     var db = wordbank;
     db.transaction(function(tx2) {
 	    tx2.executeSql('SELECT * FROM category WHERE id=?', [results1.insertId], function(tx3, results2) {
+		    $('#emptylist').hide();
 		    var txt = '';
 		    var row = results2.rows.item(0);
 		    txt += '<li>' + 
@@ -177,11 +199,11 @@ renderWordsOfGroup = function(tx, results) {
 	var row = results.rows.item(i);
 	groupid = row.categoryid;
 	var dl = '<dl>' +
-	    '<dt>' + row.name + '</dt>' +
+	    '<dt><a href="#wordbox" name="modal" id="w' + row.wordid + '">' + row.name + '</a></dt>' +
 	    '<dd>' + row.definition + '</dd>';
-	txt += '<li class = word id=w' + row.wordid + '>' + dl +
-	    '</li>';
+	txt += '<li>' + dl + '</li>';
     }
     if(groupid != null)
 	document.getElementById('l'+groupid).innerHTML = txt;
+    setupWords();
 }
