@@ -1,15 +1,28 @@
 body {
         margin: 0;
 	font-family:"Times New Roman", times, serif;
-	position: relative;
 	font-size: 1 em;
+}
+
+.definition {
+	font-size: 1.5 em;
+	margin: 0 auto;
+}
+
+
+#navbar-wrapper {
+	width: 100%;
+	height: 35 px;
+}
+
+#emptylist {
+	padding-top: 30 px;
+	text-align: center;
 }
 
 #navbar {
 	width: 100%;
-	height: 35 px;
-	display: inline-block;
-	background-color: #F78181;
+	background: #F78181;
 	-webkit-box-shadow: 0 0 5px #999;
 }
 
@@ -27,7 +40,9 @@ body {
 }
 
 #addgroup-inner {
+	padding-right: 10 px;
 	float: right;
+	display: inline;
 }
 
 #collapse, #expand {
@@ -50,10 +65,20 @@ body {
 }
 
 .group {
+        overflow: auto;
         padding-bottom: 5 px;
 	padding-top: 5 px;
 	border-bottom: 1 px solid;
-	cursor: pointer;
+}
+
+.group h1 {
+       display: inline;
+       cursor: pointer;
+}
+
+.removeGroup {
+        display: inline;
+	float: right;
 }
 
 ul.wordlist {
@@ -67,7 +92,6 @@ ul.wordlist li {
 	display: inline-block; */
 	padding-right: 5 px;
 	vertical-align: top;
-	text-overflow: ellipsis;
 }	
 
 h1 {
@@ -84,6 +108,11 @@ dt {
 	margin-right: 5 px;
 }
 
+dt a {
+	color: black;
+	text-decoration: none;
+}
+
 dd {
 	height: 60 px;
 	margin-left: 0;
@@ -94,27 +123,41 @@ ul.wordlist li:hover {
 	background:#ffffcc;
 }
 
+.definition {
+	font-size: 1.2 em;
+}
+
+.term {
+        font-size: 1.5 em;
+	font-weight: bold;
+}
+
 /*
 	Popup box CSS
 */
 
 #mask {
-	position: absolute;
-	z-index: 9000;
-	background-color: #000;
-	display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 9000;
+      display: none;
+
 }
 
 #boxes .window {
-	position: fixed;
-	width: 440 px;
-	height: 200 px;
-	display: none;
-	z-index: 9999;
-	padding: 20 px;
+       position: fixed;
+       width: 440 px;
+       height: 200 px;
+       display: none;
+       z-index: 9999;
+       padding: 20 px;
 }
 
-#boxes #dialog {
-	width: 375 px;
-	height: 203 px;
+#boxes #wordbox {
+       width: 375 px;
+       height: 203 px;
+       background-color: white;
+
+       -webkit-box-shadow: 0 0 5px #999;
 }
