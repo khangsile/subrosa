@@ -46,13 +46,19 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         if (request.method == "lookup") {
 	    lookUpQuery(request.arg, function(def) {
 		    sendResponse({definition: def});
-		    });
+		});
         }
+	if (request.method == "createCMs") {
+	    setTimeout(function() {
+		    chrome.contextMenus.removeAll();
+		    createContextMenus();
+		}, 100);
+	}
 });
 
 
 var clickHandler = function(e) {
-    alert(e.menuItemId);
+
     lookUpQuery(e.selectionText, function(def) {
 	    if (def.trim() == '') {
 		def = "Invalid input. Your argument is invalid.";
@@ -63,27 +69,29 @@ var clickHandler = function(e) {
 	});
 }
 
-var parentCM = chrome.contextMenus.create({
-	"title": "Store word",
-	"contexts": ["selection"]
-});
+function createContextMenus() {
 
-function addContextChild(id, name) {
-  var child = chrome.contextMenus.create({
-	    "title": name,
-	    "id": id + '',
-	    "parentId": parentCM,
-	    "onclick": clickHandler,
+    var parentCM = chrome.contextMenus.create({
+	    "title": "Store word",
 	    "contexts": ["selection"]
+	});
+
+    getGroups(function(tx, results) {
+	    for(var i=0; i < results.rows.length; i++) {
+		var row = results.rows.item(i);
+		
+		var child = chrome.contextMenus.create({
+			"title": row.name,
+			"id": row.id + '',
+			"parentId": parentCM,
+			"onclick": clickHandler,
+			"contexts": ["selection"]
+		    });
+
+	    }
     });
+
 }
 
-getGroups(function(tx, results) {
-        for(var i=0; i < results.rows.length; i++) {
-            var row = results.rows.item(i);
-
-            addContextChild(row.id, row.name);
-        }
-    });
-
-addContextChild(0, "Default");         
+createContextMenus();
+         
