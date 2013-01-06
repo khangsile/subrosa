@@ -56,8 +56,13 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	}
 });
 
-
 var clickHandler = function(e) {
+
+    chrome.tabs.getSelected(null, function(tab) {
+	    chrome.tabs.sendMessage(tab.id, {greeting: "hello"}, function(response) {
+		    console.log(reponse.farewell);
+		});
+	});
 
     lookUpQuery(e.selectionText, function(def) {
 	    if (def.trim() == '') {
@@ -65,7 +70,6 @@ var clickHandler = function(e) {
 	    } else {
 		addWord(e.selectionText, def, e.menuItemId);
 	    }
-	    alert(def);
 	});
 }
 

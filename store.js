@@ -1,26 +1,32 @@
 window.addEventListener('dblclick', handleClick, false);
 window.addEventListener('contextmenu', updateCM, false);
 
-text = "<a href='#dialog' name='modal'>Simple Modal Window</a>" +
-    "<div id='boxes'>" +
-    "<div id='dialog' class='window'>" +
-    "<b>Testing Witch of Modal Window</b>" +
-    "<a href='#' class='close'>Close it</a>" +
-    "</div>" + "<div id='mask'></div>" +
-    "</div>";
+$(document).ready(function() {
+  link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = chrome.extension.getURL('css/frames.css');
+  document.body.appendChild(link);
 
-$("body").prepend(text);
+  popup = "<div id='overlay'>" + "<div class='def_content'>" + "Content you want the user to see" +
+    "</div></div> <div id='mask'></div>";
 
-//createModalWindow();
+  $("body").append(popup);
+    });
 
-function handleClick(e) {
+chrome.extension.onMessage.addListener(
+  function(request, sender, sendResponse) {
+      
+      handleClick();
+  });				   
+
+function handleClick() {
     var query = window.getSelection().toString().trim();
-    
     if (query != '') {
 	chrome.extension.sendRequest({method: "lookup", arg: query}, function(response) {
 		var def = response.definition;
-		    //Create the modal dialog box
-			
+		if (def!='')
+		    showOverlay(def);
 	    });	  
     }
 }
@@ -30,28 +36,15 @@ function updateCM(e) {
 	});
 }
 
-function createModalWindow() {
-    $('a[name=modal]').click(function(e) {
-	    e.preventDefault();
+function showOverlay(definition) {
+    $('div.def_content').html("<p>"+definition+"</p>");
+    el = document.getElementById("overlay");
+    el.style.visibility=(el.style.visibility=="visible")?"hidden":"visible";
 
-	    var id = $(this).attr('href');
-	    
-	    var maskHeight = $(document).height();
-	    var maskWidth = $(window).width();
-
-	    $('#mask').css({'width':maskWidth, 'height':maskHeight});
-
-	    $('#mask').fadeIn(100);
-	    $('#mask').fadeTo("slow", 0.8);
-
-	    var winH = $(window).height();
-	    var winW = $(window).width();
-
-	    $(id).css('top', winH/2-$(id).height()/2);
-	    $(id).css('left', winW/2-$(id).width()/2);
-
-	    $(id).fadeIn(2000);
+    $('#overlay').click(function() {
+	    el = document.getElementById("overlay");
+	    el.style.visibility="hidden";
 	});
-
-
 }
+
+
