@@ -147,13 +147,36 @@ function setNameOfGroup(groupid, name, callback) {
 renderWordPopup = function(tx, results) {
     var txt = '';
     var word = results.rows.item(0);
-    txt += '<div class=term>' + word.name + '</div>';
+    txt += '<div class=term name=w' + word.id + '>' + word.name + '</div>';
     txt += '<div class="definition">' + word.definition + '</div>';
     $('#wordfill').html(txt);
 }
 
+renderWordEdit = function(tx, results) {
+    var txt = '';
+    var word = results.rows.item(0);
+    txt += '<div class=term>' + word.name + '</div>';
+    var note = '';
+    if(word.note != null)
+	note = word.note;
+    txt += '<textarea>' + note + '</textarea>';
+    txt += '<button type="button" name=' + word.id + '>Edit note</button>';
+    $('#editbox').html(txt);
+    
+    $('#editbox button').click(function() {
+	    var wordid = $(this).attr('name');
+	    console.log(wordid);
+	    $('#editbox').hide();
+	    console.log($('#editbox textarea').val());
+	    setNoteOfWord(wordid, $('#editbox textarea').val().trim(), null);
+	});	    
+}
+
 renderGroups = function(tx, results) {
     var txt = '';
+    var subnav = '<a href=# class="remove-group"><img src=img/delete.png></a>' +
+                 '<a href=# class="export"><img src=img/export.png></a>' +
+                 '<a href=# class="edit-description"><img src=img/edit.png></a>';
     if(results.rows.length == 0)
 	$('#emptylist').show();
     else {
@@ -161,10 +184,9 @@ renderGroups = function(tx, results) {
 	for(var i=0; i<results.rows.length; i++) {
 	    var row = results.rows.item(i);
 	    txt += '<li >' + 
-		'<div class=group><h1>' + row.name +
-		'</h1><a class=removeGroup href=#g' + row.id + 
-		'><img src=img/collapse-large-blue-Shapes4FREE.png></a>' +
-		'</div><ul class=wordlist id=l' + row.id + '></ul></li>';
+		'<div class=group id="g' + row.id + 
+		'"><div class=group-title>' + row.name + '</div>' + subnav + 
+		'</div><ul class=wordlist id=l' + row.id + '></ul></div></li>';
 	}
 	$('#grouplist').html(txt);
 	for(var i=0; i<results.rows.length; i++) {
@@ -190,7 +212,6 @@ renderGroup = function(tx1, results1) {
 		}, onError);
 	});
 }
-    
 
 renderWordsOfGroup = function(tx, results) {
     var txt = '';
