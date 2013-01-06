@@ -177,6 +177,7 @@ ul.wordlist li:hover {
 
 #boxes #wordfill {
        height: 183 px;
+       overflow: auto;
 }
 
 #boxes #wordbox, #boxes #editbox{
