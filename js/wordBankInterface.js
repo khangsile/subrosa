@@ -23,12 +23,7 @@ function setUpDatabase() {
     db.transaction(function(tx) { 
 	    tx.executeSql('CREATE TABLE IF NOT EXISTS ' + 
 			  'category(id INTEGER PRIMARY KEY ASC, name TEXT NOT NULL, description TEXT)', 
-			  [], function(tx, results) {
-			      if(localStorage.getItem(tableInitialized) != null) {
-				  addGroup(generalWords, null, null);
-				  localStorage.setItem(tableInitialized, 'true');
-			      }
-			  }, onError);
+			  [], null, onError);
 	});
     db.transaction(function(tx) {
 	    tx.executeSql('CREATE TABLE IF NOT EXISTS ' +
@@ -100,6 +95,14 @@ function getWord(wordid, callback) {
 	});
 }
 
+function getWordByName(word, callback) {
+    db = wordbank;
+    db.transaction(function(tx) {
+	    tx.executeSql('SELECT * FROM word WHERE name=?',
+			  [word], callback, onError);
+	});
+}
+
 function removeWord(wordid, callback) {
     db = wordbank;
     db.transaction(function(tx) {
@@ -149,7 +152,12 @@ renderWordPopup = function(tx, results) {
     var word = results.rows.item(0);
     txt += '<div class=term name=w' + word.id + '>' + word.name + '</div>';
     txt += '<div class="definition">' + word.definition + '</div>';
+    var note = 'No notes on this word.'
+    if(word.note != null)
+	note = word.note;
+    txt += '<br/><div class="note">Notes: <br/>' + note + '</div>';
     $('#wordfill').html(txt);
+    $('#wordbox').show();
 }
 
 renderWordEdit = function(tx, results) {
@@ -162,21 +170,28 @@ renderWordEdit = function(tx, results) {
     txt += '<textarea>' + note + '</textarea>';
     txt += '<button type="button" name=' + word.id + '>Edit note</button>';
     $('#editbox').html(txt);
+    $('#editbox').show();
+    $('#wordbox').hide();
     
     $('#editbox button').click(function() {
 	    var wordid = $(this).attr('name');
-	    console.log(wordid);
+	    //console.log(wordid);
 	    $('#editbox').hide();
-	    console.log($('#editbox textarea').val());
-	    setNoteOfWord(wordid, $('#editbox textarea').val().trim(), null);
+	    $('#wordbox').show();
+	    //console.log($('#editbox textarea').val());
+	    var note = $('#editbox textarea').val().trim();
+	    if(note != '') {
+		setNoteOfWord(wordid, note, null);
+		$('.note').html('Notes: <br/>' + note);
+	    }
 	});	    
 }
 
 renderGroups = function(tx, results) {
     var txt = '';
-    var subnav = '<a href=# class="remove-group"><img src=img/delete.png></a>' +
-                 '<a href=# class="export"><img src=img/export.png></a>' +
-                 '<a href=# class="edit-description"><img src=img/edit.png></a>';
+    var subnav = '<a href=# class="remove-group"><img src=img/delete.png title="Remove Group"></a>' +
+                 '<a href=# class="export"><img src=img/export.png title="Export to Quizlet"></a>' +
+                 '<a href=# class="edit-description"><img src=img/edit.png title="Edit Description"></a>';
     if(results.rows.length == 0)
 	$('#emptylist').show();
     else {
@@ -227,4 +242,17 @@ renderWordsOfGroup = function(tx, results) {
     if(groupid != null)
 	document.getElementById('l'+groupid).innerHTML = txt;
     setupWords();
+}
+
+renderWordForNotebox = function(tx, results) {
+    var txt = '';
+    var word = results.rows.item(0);
+    if(word.note != null) {
+	txt += '<h1>Note for ' + word.name + '</h1>';
+	txt += '<p>' + word.note + '</p>';
+	$('#notebox').html(txt);
+	$('#notebox').show();
+    }
+
+
 }

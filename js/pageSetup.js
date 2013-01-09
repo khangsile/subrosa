@@ -1,7 +1,8 @@
 getGroups(renderGroups);
 function pageSetup() {
     $(document).ready(function() {
-	var toggleSpeed = 400;
+	var toggleSpeed = 300;
+	/*
 	$("#expand").click(function() {
 		$(".wordlist").slideDown(toggleSpeed);
 		$("#expand").hide();
@@ -14,6 +15,9 @@ function pageSetup() {
 	    });
 	$("#expand").hide();
 
+	*/
+	//	$('#wordbank').show();
+
 	$("button#addgroup-button").click(function() {
 		var groupName = document.getElementById("addgroup-text").value.trim();
 		if(groupName != "") {
@@ -24,7 +28,9 @@ function pageSetup() {
 	    });
 
 	$('.remove-group').click(function(e) {
-		var remove = confirm('Do you want to remove?');
+		var groupName = $(this).parent().find('.group-title').html();
+		console.log(groupName);
+		var remove = confirm('Do you want to remove ' + groupName + '?');
 		if(remove) {
 		    var groupid = $(this).parent().attr('id');
 		    groupid = groupid.substr(1, groupid.length);
@@ -51,7 +57,7 @@ function pageSetup() {
 		$('.window').hide();
 	    });
 
-	$('#wordbox a').click(function () {
+	$('#wordbox a.edit').click(function () {
 		var wordid = $(this).parent().find('.term').attr('name');
 		wordid = wordid.substr(1, wordid.length);
 		console.log(wordid);
@@ -64,9 +70,23 @@ function pageSetup() {
 		$('#editbox').css('top', winH/2 - $(wordbox).height()/2);
 		$('#editbox').css('left', winW/2 - $(wordbox).width()/2);
 
-		$('#wordbox').hide();
-		$('#editbox').show();
-		
+		//		$('#editbox').show();
+		//		$('#wordbox').hide();
+	    });
+
+	$('#wordbox a.remove').click(function () {
+		console.log($(this).parent().find('.term').html());
+		var remove = confirm('Do you want to remove ' + $(this).parent().find('.term').html() + '?');
+	        if(remove) {
+		    var wordid = $(this).parent().find('.term').attr('name');
+		    wordid = wordid.substr(1, wordid.length);
+		    console.log(wordid);
+	
+		    $('#wordbox').hide();
+		    removeWord(wordid, null);
+		    console.log($('#w' + wordid).parent().parent().parent());
+		    $('#w' + wordid).parent().parent().parent().remove();
+		}
 	    });
     });
 }
@@ -92,7 +112,27 @@ function setupWords() {
 		$(wordbox).css('top', winH/2 - $(wordbox).height()/2);
 		$(wordbox).css('left', winW/2 - $(wordbox).width()/2);
 
-		//		$(wordbox).fadeIn(fadeSpeed);
-		$(wordbox).show();
+		//		$(wordbox).fadeIn(fadeSpeed);		
 	    });
+	/*
+	$('a[name=modal]').hover(function(e) {
+		var winH = $(window).height();
+		var winW = $(window).width();
+		
+		var noteboxTop = winH/2 - $('#notebox').height()/2;
+		var noteboxLeft = winW/2 + 300;
+		var noteboxWidth = winW - noteboxLeft - 50;
+		
+		$('#notebox').css('top', noteboxTop);
+		$('#notebox').css('left', noteboxLeft);
+		$('#notebox').css('width', noteboxWidth);
+
+	        var wordid = $(this).attr('id');
+		wordid = wordid.substr(1, wordid.length);
+		getWord(wordid, renderWordForNotebox);
+
+		$(this).parent().parent().parent().parent().hover(function() {
+			$('#notebox').hide();
+		    });
+	    }); */
 }
