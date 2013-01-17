@@ -22,6 +22,5 @@
     "tabs",
     "contextMenus",
     "*://*.dictionaryapi.com/api/*"
-    ],
-  "web_accessible_resources": [ "css/frames.css", "js/jquery-1.8.3.js"]
+    ]
 }
