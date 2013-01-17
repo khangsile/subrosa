@@ -13,27 +13,8 @@ function lookUpQuery(query, callback) {
 
     req.onreadystatechange = function() {
 	if (req.readyState == 4 && req.status == 200) {
-
-	    var xml = $.parseXML(req.responseText),
-	    $xml = $( xml ),
-	    $deflist = $xml.find('def');
-
-	    $test = $deflist.find('dt');
-	    
-	    try {
-	      $test.find('vi').remove();
-	      $test.find('sx').remove();
-	    } catch (err) {
-		console.log(err.message);
-	    }
-	    var defs = $test.text().split(":");
-	    var def = defs[0];
-
-	    for(var i=0; def.trim() == '' && i < defs.length; i++) {
-		def = defs[i];
-	    }
-
-	    callback(def);
+	    var resp = req.responseText;
+	    callback(resp);
 	    
 	}
   }
@@ -54,24 +35,36 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 		    createContextMenus();
 		}, 100);
 	}
+	if (request.method == "store") {
+	    addWord(request.arg, request.def, request.id);
+	}
 });
 
 var clickHandler = function(e) {
-
     chrome.tabs.getSelected(null, function(tab) {
-	    chrome.tabs.sendMessage(tab.id, {greeting: "hello"}, function(response) {
+	    chrome.tabs.sendMessage(tab.id, {id: e.menuItemId}, function(response) {
 		    console.log(reponse.farewell);
 		});
 	});
+    
 
-    lookUpQuery(e.selectionText, function(def) {
-	    if (def.trim() == '') {
-		def = "Invalid input. Your argument is invalid.";
-	    } else {
-		addWord(e.selectionText, def, e.menuItemId);
+    /* lookUpQuery(e.selectionText, function(definitions) {
+	    var defs = definitions.split(':');
+	    var defNum = 1;
+	    var text = '';
+	    for(var i=0; i<defs.length;i++) {
+		defs[i] = defs[i].trim();
+		if (defs[i] != '') {
+		    text = text + defNum + '. ' + defs[i] + '. ';
+		    defNum = defNum + 1;
+		}
 	    }
-	});
-}
+
+	    if (text.trim() != '') {
+		addWord(e.selectionText, text, e.menuItemId);
+	    }
+	    }); */
+} 
 
 function createContextMenus() {
 
