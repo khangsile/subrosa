@@ -61,7 +61,7 @@ function showOverlay(query, callback) {
     var defNum = 1;
     for(var i=0; i<defs.length; i++) {
 	var def = defs[i].trim();
-	if (defs[i] != '') {
+	if (def != '') {
 	    definition = definition + '<p>'+defNum+'. '+ def + '</p>';
 	    savedDef = savedDef + defNum+'. ' + def + '. ';
 	    defNum++;
