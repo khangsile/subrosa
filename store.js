@@ -23,9 +23,15 @@ function popUpWord(id) {
     if (query != '') {
 	chrome.extension.sendRequest({method: "lookup", arg: query}, function(response) {
 		var reqQuery = response.definition;
-		showOverlay(reqQuery, function(word, definition) {
-			    store(word, definition, id);  
-			});
+		var xml = $.parseXML(reqQuery),
+		    $xml = $( xml );
+		$entry = $xml.find('entry').first();
+		if ($entry.text() != '') {
+		  showOverlay(reqQuery, function(word, definition) {
+			    store(word, definition, id);
+		        
+		      });
+		}
 	    });	  
     }
 }
