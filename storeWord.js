@@ -42,7 +42,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 
 var clickHandler = function(e) {
     chrome.tabs.getSelected(null, function(tab) {
-	    chrome.tabs.sendMessage(tab.id, {id: e.menuItemId}, function(response) {
+	    chrome.tabs.sendMessage(tab.id, {requester: "background", 
+				   id: e.menuItemId}, function(response) {
 		    console.log(reponse.farewell);
 		});
 	});

@@ -11,17 +11,23 @@ $(document).ready(function() {
 
 chrome.extension.onMessage.addListener(
   function(request, sender, sendResponse) {
-      popUpWord(request.id);
+      if (request.requester == "background")
+	  popUpWord(request.id, '');
+      else if (request.requester == "popup")
+	  popUpWord(-1, request.myquery);
   });		
 
 function handleClick() {
-    popUpWord(-1);
+    popUpWord(-1, '');
 }
 
-function popUpWord(id) {
-    var query = window.getSelection().toString().trim();
+function popUpWord(id, query) {
+
+    if (query == '')
+	query = window.getSelection().toString().trim();
     if (query != '') {
-	chrome.extension.sendRequest({method: "lookup", arg: query}, function(response) {
+	chrome.extension.sendRequest({method: "lookup", arg: query}, 
+				     function(response) {
 		var reqQuery = response.definition;
 		var xml = $.parseXML(reqQuery),
 		    $xml = $( xml );
@@ -55,7 +61,6 @@ function showOverlay(query, callback) {
     $def.find('vi').remove();
     $def.find('sx').remove();
     
-    var definitions = '';
     var defs = '';
     $def.find('dt').each(function(index) {
 	    defs = defs + '%a' + $(this).text();

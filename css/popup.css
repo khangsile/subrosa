@@ -1,0 +1,22 @@
+body {
+  color: black;
+  font-family: arial, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  padding: 0;
+  width: 300px;
+}
+
+#query {
+  width: 200px;
+  padding: 2px;
+  outline-offset: 0px;
+  margin-left: 4px;
+  margin-top: 4px;
+}
+
+#logo {
+  align: right;
+  margin-right: 4px;
+  margin-top: 4px;
+}
